@@ -26,7 +26,7 @@ And you're in!
 	Keep commit messages clean and descriptive like "added login form" instead of "fixed stuff" pls i beg.
 
 --- Commiting .env files ---
-	Do not commit .env files to git and create a .gitignore to keep it private.
+	Do not commit .env files to git. I created a .gitignore file for us, add your file extension to keep things private!!
 
 --- Further Rules ---
 	Probs will be added as the project goes on.
