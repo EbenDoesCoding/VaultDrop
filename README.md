@@ -17,5 +17,13 @@ This is the official README for the Devops project (details to be announced). Ev
 
 Any questions about the project or the repository should be directed to the repo owner, Eben: eben.johnvalson2@mail.dcu.ie
 
+### Last Updated
+
+Saturday, 03 October 2026
+
+### License & Project Status
+
+MIT License - code is free to use and adapt by all.
+Project is fully operational
 
 <!-- Future sections, Project Overview, Setup, Usage, etc -->
