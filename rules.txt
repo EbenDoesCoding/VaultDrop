@@ -1,0 +1,34 @@
+~~First Time Set Up~~
+
+To clone this repo to your local machine:
+
+git clone https://gitlab.computing.dcu.ie/eben.johnvalson2/devops-finalproject.git
+cd devops-finalproject/
+
+And you're in!
+
+~~Rules for Editing and Pushing~~
+
+--- Branching Rules---
+	1. ALWAYS create a new branch using git checkout -b "BRANCH_NAME", main is a protected branch and you will not be allowed to push your work to gitlab if you do.
+	2. Branches must be named after their purpose such as "feature/login" or "fix-documentations". This is to make sure to know what each member is doing.
+	3. Once you make sure you are ready to merge to main, submit a merge request (MR) for your changes to be reviwed. Once approved, your branch will be merged into the main branch.
+	4. Only Eben & Abhinav can approve merge requests and they also must abide by the rules state above. (If you encounter issues, contact these individuals first)
+
+--- Avoiding Merge Conflicts ---
+	1. Always make sure to get your branch upto date before working on it. You can do this by running:
+	git checkout main
+	git pull
+	git checkout "YOUR_BRANCH"
+	git merge main
+
+--- Commit Messages ---
+	Keep commit messages clean and descriptive like "added login form" instead of "fixed stuff" pls i beg.
+
+--- Commiting .env files ---
+	Do not commit .env files to git. I created a .gitignore file for us, add your file extension to keep things private!!
+
+--- Further Rules ---
+	Probs will be added as the project goes on.
+
+Note: I have implemented a basic MR (Merge Request) format for us to trial, this will make it easier for Eben and Abhinav to review and get your request approved quicker.
