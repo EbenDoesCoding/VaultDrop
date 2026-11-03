@@ -12,7 +12,13 @@ This is the official README for the Devops project (details to be announced). Ev
 | Developer  | Christa Gigi     |A00060458      |
 | Developer  | Khalid Ogidan    |A00056115      |
 
-
+## Quick start
+```
+git clone <https://gitlab.computing.dcu.ie/eben.johnvalson2/devops-finalproject.git>
+cd <devops-finalproject/>
+make test
+make run        # http://localhost:3000 (override: make run PORT=4000)
+```
 ## Contact
 
 Any questions about the project or the repository should be directed to the repo owner, Eben: eben.johnvalson2@mail.dcu.ie

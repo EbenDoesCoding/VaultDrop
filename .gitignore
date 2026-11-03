@@ -1,1 +1,10 @@
 *.un~
+node_modules/
+coverage/
+.nyc_output/
+dist/
+.env
+*.class
+.venv/
+__pycache__/
+.pytest_cache/
