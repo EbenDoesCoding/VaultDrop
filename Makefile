@@ -16,3 +16,4 @@ run: build
 
 clean:
 	rm -rf node_modules coverage .nyc_output dist .venv __pycache__ .pytest_cache htmlcov
+	find . -name '*un~' -delete

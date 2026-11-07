@@ -1,6 +1,6 @@
 # DevOps-FinalProject
 
-This is the official README for the Devops project (details to be announced). Everything offically related to the project that needs to be shared publicly will be documented on this file.
+Link service: create, resolve, list and view stats for links. Built with Python, FastAPI, Postgres, Docker Compose and GitLab CI.
 
 ## Project Contributors
 
@@ -19,17 +19,57 @@ cd <devops-finalproject/>
 make test
 make run        # http://localhost:3000 (override: make run PORT=4000)
 ```
+
+## Features
+- Create a link
+- Resolve a link (counts a hit)
+- List links
+- Per-link hit stats
+- Data stored in Postgres
+
+## API
+| Method | Route | Result |
+|---|---|---|
+| POST | /links | Create a link |
+| GET | /links/{id} | Resolve a link and count a hit |
+| GET | /links | List links |
+| GET | /links/{id}/stats | Hit stats |
+
+Bad input returns 400. Unknown id returns 404.
+
+## Requirements
+- Git
+- Make
+- Docker and Docker Compose
+- Python 3.12+ (only for running without Docker)
+
+## Make targets
+| Command | Action |
+|---|---|
+| `make build` | Build the Docker image |
+| `make test` | Run the test suite |
+| `make run` | Start API + database with Compose |
+| `make clean` | Remove Vim undo/swap files and caches |
+
+## Project structure
+app/ service code
+tests/ test suite
+Dockerfile API image
+compose.yaml API + Postgres
+Makefile build / test / run / clean
+.gitlab-ci.yml CI pipeline
+
 ## Contact
 
 Any questions about the project or the repository should be directed to the repo owner, Eben: eben.johnvalson2@mail.dcu.ie
 
 ### Last Updated
 
-Saturday, 03 October 2026
+Saturday, 07 November 2026
 
 ### License & Project Status
 
 MIT License - code is free to use and adapt by all.
-Project is fully operational
+Status: In Development
 
 <!-- Future sections, Project Overview, Setup, Usage, etc -->
