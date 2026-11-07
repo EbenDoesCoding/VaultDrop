@@ -14,8 +14,8 @@ Link service: create, resolve, list and view stats for links. Built with Python,
 
 ## Quick start
 ```
-git clone <https://gitlab.computing.dcu.ie/eben.johnvalson2/devops-finalproject.git>
-cd <devops-finalproject/>
+git clone <https://gitlab.computing.dcu.ie/eben.johnvalson2/vault-drop.git>
+cd <vault-drop/>
 make test
 make run        # http://localhost:3000 (override: make run PORT=4000)
 ```
