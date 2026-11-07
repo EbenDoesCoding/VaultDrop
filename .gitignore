@@ -3,9 +3,10 @@ node_modules/
 coverage/
 .nyc_output/
 dist/
-.env
+*.env
 *.class
 .venv/
 __pycache__/
 .pytest_cache/
 .DS_Store
+testing/
