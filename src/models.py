@@ -9,3 +9,8 @@ class LinkOut(BaseModel):
     url: str
     hits: int
     created_at: datetime
+
+class LinkStats(BaseModel):
+    id: int
+    url: str
+    hits: int
