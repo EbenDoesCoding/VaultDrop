@@ -1,7 +1,7 @@
 PORT ?= 3000
 
 test:
-	uv run pytest -q
+	uv run pytest -v
 
 run:
 	uv run uvicorn src.main:app --port $(PORT)
