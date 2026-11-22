@@ -1,6 +1,7 @@
 PORT ?= 3000
 IMAGE ?= myapp
 
+
 .PHONY: install test run clean docker-build docker-run compose-up compose-down
 
 install:
@@ -12,6 +13,7 @@ clean:
 	find . -name '*.un~' -delete
 	find . -name '__pycache__' -type d -exec rm -rf {} +
 	rm -rf .pytest_cache
+
 compose-up:
 	docker compose up --build -d
 
