@@ -5,12 +5,12 @@ services:
       - "3000:3000"
 
     environment:
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/vaultdrop
+      DATABASE_URL: ${DATABASE_URL}
     depends_on:
-      db:
+      postgres:
         condition: service_healthy
 
-  db:
+  postgres:
     image: postgres:16
     environment:
       POSTGRES_PASSWORD: postgres
@@ -25,5 +25,3 @@ services:
 
 volumes:
   pgdata:
-
-    restart: unless-stopped
