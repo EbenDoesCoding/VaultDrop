@@ -26,7 +26,6 @@ def db(monkeypatch):
 
 
 @pytest.fixture
-def client(db):
 def client(db, monkeypatch):
     monkeypatch.setenv("DROP_KEY", Fernet.generate_key().decode("ascii"))
     return TestClient(app)
