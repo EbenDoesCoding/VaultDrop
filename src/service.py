@@ -1,16 +1,24 @@
+import contextlib
 import hashlib
 import secrets
+
+from cryptography.fernet import InvalidToken
+
 from src.crypto import decrypt, encrypt
 from src.db import get_connection
+
 
 class DropNotFound(Exception):
     pass
 
+
 class DropGone(Exception):
     pass
 
+
 def _hash(token: str) -> str:
     return hashlib.sha256(token.encode()).hexdigest()
+
 
 def create_drop(secret: str, max_views: int, ttl_seconds: int) -> str:
     token = secrets.token_urlsafe(32)
@@ -21,6 +29,7 @@ def create_drop(secret: str, max_views: int, ttl_seconds: int) -> str:
             (_hash(token), encrypt(secret), max_views, ttl_seconds),
         )
     return token
+
 
 def consume_drop(token: str) -> str:
     h = _hash(token)
@@ -35,7 +44,10 @@ def consume_drop(token: str) -> str:
         if row is None:
             raise DropNotFound
         ciphertext, views_left, alive = row
-        if views_left == 0 or not alive:
+        if views_left > 0 and alive:
+            with contextlib.suppress(InvalidToken):
+                plaintext = decrypt(bytes(ciphertext))
+        if plaintext is None:
             conn.execute(
                 "UPDATE drops SET ciphertext = ''::bytea, views_left = 0 "
                 "WHERE token_hash = %s",
@@ -49,10 +61,10 @@ def consume_drop(token: str) -> str:
                 "ELSE ciphertext END WHERE token_hash = %s",
                 (h,),
             )
-            plaintext = decrypt(bytes(ciphertext))
     if gone:
         raise DropGone
     return plaintext
+
 
 def purge_expired() -> int:
     with get_connection() as conn:

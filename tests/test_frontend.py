@@ -33,6 +33,7 @@ def test_frontend_keeps_api_routes_reachable():
 def test_missing_asset():
     assert TestClient(app).get("/missing.css").status_code == 404
 
+
 def test_sender_and_recipient_scripts_are_served():
     client = TestClient(app)
 
@@ -59,11 +60,14 @@ def test_share_page_only_consumes_a_view_when_api_is_called(monkeypatch):
     monkeypatch.setattr(service, "consume_drop", consume)
     client = TestClient(app)
 
-    response = client.post("/drops", json={
-        "secret": "example secret",
-        "max_views": 2,
-        "ttl_seconds": 300,
-    })
+    response = client.post(
+        "/drops",
+        json={
+            "secret": "example secret",
+            "max_views": 2,
+            "ttl_seconds": 300,
+        },
+    )
     assert response.status_code == 201
     assert response.json() == {"token": token}
     assert created == [("example secret", 2, 300)]
