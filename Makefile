@@ -2,6 +2,10 @@ PORT ?= 3000
 TEST_DATABASE_PORT ?= 55433
 
 .PHONY: install db test dev run down build clean lint fmt
+.DELETE_ON_ERROR:
+
+.env:
+	uv run python3 -c "from cryptography.fernet import Fernet; print('DROP_KEY=' + Fernet.generate_key().decode())" > .env
 
 install:
 	uv sync
@@ -13,17 +17,17 @@ test:
 	TEST_DATABASE_PORT=$(TEST_DATABASE_PORT) docker compose up -d --wait test-db
 	TEST_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:$(TEST_DATABASE_PORT)/vaultdrop_test uv run --locked pytest -v
 
-dev:
-	uv run uvicorn src.main:app --port $(PORT)
+dev: db .env
+	uv run --env-file .env uvicorn src.main:app --port $(PORT)
 
 build:
 	docker compose build
 
-run:
+run: .env
 	docker compose up --build
 
 down:
-	docker compose down
+	docker compose --profile test down
 
 clean:
 	find . -name '*.un~' -delete
