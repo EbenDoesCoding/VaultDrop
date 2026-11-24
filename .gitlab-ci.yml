@@ -1,0 +1,20 @@
+test:
+  stage: test
+  image: python:3.12-slim
+  services:
+    - name: postgres:16
+      alias: postgres
+  variables:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
+    POSTGRES_DB: vaultdrop_test
+    DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/vaultdrop_test"
+  before_script:
+    - python -m pip install uv
+    - uv sync --locked --dev
+  script:
+    - uv run --locked pytest -v --junitxml=pytest-report.xml
+  artifacts:
+    when: always
+    reports:
+      junit: pytest-report.xml
