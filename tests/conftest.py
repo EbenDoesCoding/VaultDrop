@@ -1,10 +1,7 @@
 import os
 
 import pytest
-<<<<<<< HEAD
-=======
 from cryptography.fernet import Fernet
->>>>>>> origin/main
 from fastapi.testclient import TestClient
 from psycopg.conninfo import conninfo_to_dict
 
@@ -29,10 +26,7 @@ def db(monkeypatch):
 
 
 @pytest.fixture
-<<<<<<< HEAD
 def client(db):
-=======
 def client(db, monkeypatch):
     monkeypatch.setenv("DROP_KEY", Fernet.generate_key().decode("ascii"))
->>>>>>> origin/main
     return TestClient(app)
