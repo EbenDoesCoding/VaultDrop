@@ -1,16 +1,21 @@
 import hashlib
 import secrets
+
 from src.crypto import decrypt, encrypt
 from src.db import get_connection
+
 
 class DropNotFound(Exception):
     pass
 
+
 class DropGone(Exception):
     pass
 
+
 def _hash(token: str) -> str:
     return hashlib.sha256(token.encode()).hexdigest()
+
 
 def create_drop(secret: str, max_views: int, ttl_seconds: int) -> str:
     token = secrets.token_urlsafe(32)
@@ -21,6 +26,7 @@ def create_drop(secret: str, max_views: int, ttl_seconds: int) -> str:
             (_hash(token), encrypt(secret), max_views, ttl_seconds),
         )
     return token
+
 
 def consume_drop(token: str) -> str:
     h = _hash(token)
@@ -53,6 +59,7 @@ def consume_drop(token: str) -> str:
     if gone:
         raise DropGone
     return plaintext
+
 
 def purge_expired() -> int:
     with get_connection() as conn:
