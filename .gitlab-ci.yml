@@ -16,8 +16,8 @@ test:
     - uv sync --locked --dev
   script:
     - uv run --locked pytest -v --junitxml=pytest-report.xml
-	- uv run --locked ruff check .
-	- uv run --locked ruff format --check .
+    - uv run --locked ruff check .
+    - uv run --locked ruff format --check .
   artifacts:
     when: always
     reports:
