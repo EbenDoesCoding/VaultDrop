@@ -1,13 +1,39 @@
+from concurrent.futures import ThreadPoolExecutor
+
+from fastapi.testclient import TestClient
+
 from src import service
 from src.db import get_connection
+from src.main import app
+
+
+def test_concurrent_opens_consume_only_one_view(client):
+    token = make(client, max_views=1).json()["token"]
+
+    def open_drop(_):
+        return TestClient(app).get(f"/drops/{token}").status_code
+
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        codes = list(pool.map(open_drop, range(8)))
+
+    assert sorted(codes) == [200] + [410] * 7
+
+
+def test_create_rejects_out_of_range_input(client):
+    assert make(client, secret="x" * 10_001).status_code == 400
+    assert make(client, max_views=101).status_code == 400
+    assert make(client, ttl_seconds=604_801).status_code == 400
+
 
 def make(client, **extra):
     return client.post("/drops", json={"secret": "hunter2", **extra})
+
 
 def test_create_returns_token(client):
     r = make(client)
     assert r.status_code == 201
     assert len(r.json()["token"]) >= 20
+
 
 def test_open_returns_secret_then_410(client):
     token = make(client).json()["token"]
@@ -16,17 +42,21 @@ def test_open_returns_secret_then_410(client):
     assert first.json() == {"secret": "hunter2"}
     assert client.get(f"/drops/{token}").status_code == 410
 
+
 def test_max_views_respected(client):
     token = make(client, max_views=2).json()["token"]
     assert client.get(f"/drops/{token}").status_code == 200
     assert client.get(f"/drops/{token}").status_code == 200
     assert client.get(f"/drops/{token}").status_code == 410
 
+
 def test_unknown_token_returns_404(client):
     assert client.get("/drops/" + "x" * 43).status_code == 404
 
+
 def test_short_token_returns_400(client):
     assert client.get("/drops/abc").status_code == 400
+
 
 def test_create_rejects_bad_input(client):
     assert client.post("/drops", json={}).status_code == 400
@@ -34,11 +64,13 @@ def test_create_rejects_bad_input(client):
     assert make(client, max_views=0).status_code == 400
     assert make(client, ttl_seconds=0).status_code == 400
 
+
 def test_expired_drop_returns_410(client):
     token = make(client).json()["token"]
     with get_connection() as conn:
         conn.execute("UPDATE drops SET expires_at = now() - interval '1 second'")
     assert client.get(f"/drops/{token}").status_code == 410
+
 
 def test_secret_encrypted_at_rest_and_wiped(client):
     token = make(client).json()["token"]
@@ -49,6 +81,7 @@ def test_secret_encrypted_at_rest_and_wiped(client):
     with get_connection() as conn:
         wiped = bytes(conn.execute("SELECT ciphertext FROM drops").fetchone()[0])
     assert wiped == b""
+
 
 def test_purge_removes_expired(client):
     make(client)
