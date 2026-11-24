@@ -2,7 +2,7 @@ PORT ?= 3000
 IMAGE ?= myapp
 
 
-.PHONY: install test run clean docker-build docker-run compose-up compose-down
+.PHONY: install test run clean docker-build docker-run compose-up compose-down lint fmt
 
 install:
 	uv sync
@@ -28,3 +28,10 @@ docker-build:
 docker-run:
 	docker run --rm -p $(PORT):3000 $(IMAGE)
 
+lint:
+	uv run --locked ruff check .
+	uv run --locked ruff format --check .
+
+fmt:
+	uv run --locked ruff check --fix .
+	uv run --locked ruff format .

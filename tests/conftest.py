@@ -1,12 +1,12 @@
 import os
+
 import pytest
+from fastapi.testclient import TestClient
 from psycopg.conninfo import conninfo_to_dict
 
 import src.db as database
-
-from src.db import get_connection, init_db
-from fastapi.testclient import TestClient
 from src.main import app
+
 
 @pytest.fixture
 def db(monkeypatch):
@@ -23,6 +23,7 @@ def db(monkeypatch):
     with database.get_connection() as conn:
         conn.execute("TRUNCATE links RESTART IDENTITY")
 
+
 @pytest.fixture
 def client(db):
-	return TestClient(app)
+    return TestClient(app)

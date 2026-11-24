@@ -1,12 +1,15 @@
 import os
+
 import psycopg
 
 DATABASE_URL = os.getenv(
     "DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/vaultdrop"
 )
 
+
 def get_connection():
     return psycopg.connect(DATABASE_URL)
+
 
 def init_db():
     with get_connection() as conn:

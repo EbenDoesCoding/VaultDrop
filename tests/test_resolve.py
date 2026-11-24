@@ -6,8 +6,10 @@ def test_resolve_counts_hits(client):
     assert first.json()["hits"] == 1
     assert second.json()["hits"] == 2
 
+
 def test_resolve_unknown_id_returns_404(client):
     assert client.get("/links/9999").status_code == 404
+
 
 def test_resolve_bad_id_returns_400(client):
     assert client.get("/links/abc").status_code == 400
