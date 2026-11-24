@@ -1,5 +1,28 @@
+from concurrent.futures import ThreadPoolExecutor
+
+from fastapi.testclient import TestClient
+
 from src import service
 from src.db import get_connection
+from src.main import app
+
+
+def test_concurrent_opens_consume_only_one_view(client):
+    token = make(client, max_views=1).json()["token"]
+
+    def open_drop(_):
+        return TestClient(app).get(f"/drops/{token}").status_code
+
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        codes = list(pool.map(open_drop, range(8)))
+
+    assert sorted(codes) == [200] + [410] * 7
+
+
+def test_create_rejects_out_of_range_input(client):
+    assert make(client, secret="x" * 10_001).status_code == 400
+    assert make(client, max_views=101).status_code == 400
+    assert make(client, ttl_seconds=604_801).status_code == 400
 
 
 def make(client, **extra):
