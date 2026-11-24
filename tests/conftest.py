@@ -24,7 +24,9 @@ def db(monkeypatch):
         conn.execute("TRUNCATE drops")
 
 
+
 @pytest.fixture
+def client(db):
 def client(db, monkeypatch):
     monkeypatch.setenv("DROP_KEY", Fernet.generate_key().decode("ascii"))
     return TestClient(app)

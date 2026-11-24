@@ -1,7 +1,12 @@
 PORT ?= 3000
 TEST_DATABASE_PORT ?= 55433
 
+<<<<<<< HEAD
+
+.PHONY: install test run clean docker-build docker-run compose-up compose-down lint fmt
+=======
 .PHONY: install db test dev run down build clean
+>>>>>>> origin/main
 
 install:
 	uv sync
@@ -29,3 +34,26 @@ clean:
 	find . -name '*.un~' -delete
 	find . -name '__pycache__' -type d -exec rm -rf {} +
 	rm -rf .pytest_cache
+<<<<<<< HEAD
+
+compose-up:
+	docker compose up --build -d
+
+compose-down:
+	docker compose down
+
+docker-build:
+	docker build -t $(IMAGE) .
+
+docker-run:
+	docker run --rm -p $(PORT):3000 $(IMAGE)
+
+lint:
+	uv run --locked ruff check .
+	uv run --locked ruff format --check .
+
+fmt:
+	uv run --locked ruff check --fix .
+	uv run --locked ruff format .
+=======
+>>>>>>> origin/main

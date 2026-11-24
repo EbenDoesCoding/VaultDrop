@@ -1,5 +1,7 @@
 from src.db import get_connection
 
+
+def test_insert_and_read_link(db):
 def test_insert_and_read_drop(db):
     with get_connection() as conn:
         row = conn.execute(
