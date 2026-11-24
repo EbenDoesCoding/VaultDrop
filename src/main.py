@@ -1,8 +1,10 @@
 import asyncio
 from contextlib import asynccontextmanager
+from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from src import service
 from src.crypto import check_key
 from src.db import init_db
@@ -36,3 +38,7 @@ async def validation_error_handler(request: Request, exc: RequestValidationError
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+FRONTEND_DIR = Path(__file__).resolve().parent.parent / 'frontend'
+app.mount('/', StaticFiles(directory=FRONTEND_DIR, html=True), name='frontend')
