@@ -1,112 +1,55 @@
 ## Summary
 <!-- What does this MR do, and why? 1-3 sentences. -->
 
-## Related
-- Stage: <!-- timeline stage number -->
-- Closes: <!-- #issue -->
+Closes: <!-- #issue -->
 
 ## Type of change
 - [ ] Feature
 - [ ] Bug fix
-- [ ] Refactor (no behaviour change)
 - [ ] Tests
-- [ ] Docker / Compose / DB
-- [ ] CI / Makefile
-- [ ] Docs (README)
-- [ ] Demo prep
-- [ ] Chore (deps, config)
-
-## Endpoints affected
-- [ ] create
-- [ ] resolve
-- [ ] list
-- [ ] stats
-- [ ] none
+- [ ] Security hardening
+- [ ] Docker / CI / Makefile
+- [ ] Docs
 
 ## Changes
 -
 
 ## How to test
 ```bash
+make lint
 make test
-make up
+make run   # http://localhost:3000
 # curl examples here
 ```
 
----
-
 ## Checklist
 
-### Code quality
-- [ ] Service code lives in `src/`
-- [ ] No dead code, debug prints, or commented-out blocks
-- [ ] Linter/formatter passes (`make lint` if defined)
-- [ ] Functions/variables named clearly; no unexplained magic values
-- [ ] Errors return correct HTTP status codes and messages
-
-### API
-- [ ] Request/response models validated (Pydantic)
-- [ ] Edge cases handled: not found, duplicate, expired, invalid input
-- [ ] OpenAPI docs (`/docs`) still accurate
-- [ ] No breaking change to existing endpoints (or documented below)
-
-### Database
-- [ ] Schema changes included (migration/init script)
-- [ ] Works on a fresh DB volume (`docker compose down -v && up`)
-- [ ] Queries parameterised (no string-built SQL)
-- [ ] Stats/list queries tested with realistic data
+### Code
+- [ ] Service code in `src/`, frontend in `frontend/`
+- [ ] `make lint` passes
+- [ ] Correct status codes: 400 invalid, 404 not found, 410 expired/used
 
 ### Tests
-- [ ] New/changed behaviour has tests (happy path + failure path)
-- [ ] `make test` passes locally
-- [ ] Tests don't depend on order or leftover data
-- [ ] No tests skipped/disabled without reason
+- [ ] New behaviour has tests, including bad input
+- [ ] `make test` passes locally and CI is green
 
-### Docker / Compose
-- [ ] `docker compose up` starts API + DB cleanly from scratch
-- [ ] DB healthcheck / `depends_on` still correct
-- [ ] No hardcoded host ports or credentials in images
-- [ ] `.dockerignore` up to date
-
-### Makefile / CI
-- [ ] Make targets used here still work (`up`, `down`, `test`, ...)
-- [ ] GitLab CI pipeline is green
-- [ ] New CI steps are fast and cached where sensible
-
-### Dependencies (`uv`)
-- [ ] `pyproject.toml` and lockfile both updated
-- [ ] No unused or unpinned packages added
+### Docker / DB
+- [ ] Works on a clean setup (`docker compose down -v && make run`)
+- [ ] Queries are parameterised
 
 ### Security
-- [ ] No secrets, tokens, or `.env` committed
-- [ ] Config via environment variables
-- [ ] User input never trusted (validated/escaped)
-- [ ] Error responses don't leak internals
+- [ ] No secrets committed (`.env` / `DROP_KEY` stay local)
+- [ ] Secrets never logged or returned except on a successful open
 
-### Docs
-- [ ] README updated (setup, usage, endpoints) if anything changed
-- [ ] New env vars documented
-- [ ] Contributors list unchanged/correct
-
-### Git hygiene
-- [ ] Branch up to date with `main`, no conflicts
-- [ ] Commits have clear messages
-- [ ] MR is small and focused on one thing
-- [ ] Source branch will be deleted after merge
-
-### Demo readiness
-- [ ] Change works in the demo flow (create → resolve → list → stats)
-- [ ] Nothing here breaks a clean-clone setup
-
----
+### Docs & Git
+- [ ] README updated if setup, endpoints or Make targets changed
+- [ ] `pyproject.toml` and `uv.lock` both updated if deps changed
+- [ ] Small, focused MR; branch up to date with `main`
+- [ ] Demo flow still works: create → open → open again (410)
 
 ## Risks / trade-offs
-<!-- What could go wrong? Alternatives considered? -->
-
-## Breaking changes
-<!-- None / describe -->
+<!-- What could go wrong? Alternatives considered? None is fine. -->
 
 ## Notes for reviewer
-<!-- Where to look closely -->
+<!-- Where to look closely. -->
 
-/assign_reviewer @B
