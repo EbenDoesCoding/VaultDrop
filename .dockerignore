@@ -5,3 +5,6 @@ __pycache__
 .git
 .env
 *.un~
+node_modules/
+.ruff_cache/
+.DS_Store
